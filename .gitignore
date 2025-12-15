@@ -1,0 +1,38 @@
+# Java / Quarkus
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.properties
+
+# Node / Angular
+node_modules/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Docker
+docker-compose.override.yml
+
+# Backend logs
+backend/**/*.log
+
+# Temporary environment files
+.env
