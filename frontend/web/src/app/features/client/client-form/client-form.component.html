@@ -1,0 +1,32 @@
+<div class="flex justify-content-center mt-5">
+    <p-card [header]="isEditMode ? 'Edit Client' : 'New Client'" [style]="{ width: '400px' }">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
+            <div class="flex flex-column gap-2">
+                <label htmlFor="firstName">First Name</label>
+                <input pInputText id="firstName" formControlName="firstName" />
+            </div>
+            <div class="flex flex-column gap-2">
+                <label htmlFor="lastName">Last Name</label>
+                <input pInputText id="lastName" formControlName="lastName" />
+            </div>
+            <div class="flex flex-column gap-2">
+                <label htmlFor="cin">CIN</label>
+                <input pInputText id="cin" formControlName="cin" />
+            </div>
+            <div class="flex flex-column gap-2">
+                <label htmlFor="email">Email</label>
+                <input pInputText id="email" formControlName="email" />
+            </div>
+            <div class="flex flex-column gap-2">
+                <label htmlFor="phone">Phone</label>
+                <input pInputText id="phone" formControlName="phone" />
+            </div>
+
+            <div class="flex justify-content-end gap-2 mt-3">
+                <button pButton type="button" label="Cancel" class="p-button-secondary"
+                    [routerLink]="['/clients']"></button>
+                <button pButton type="submit" label="Save" [disabled]="form.invalid"></button>
+            </div>
+        </form>
+    </p-card>
+</div>
