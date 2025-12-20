@@ -1,0 +1,10 @@
+<p-card>
+    <h2>Nouvel acte notarié</h2>
+
+    <form [formGroup]="form">
+        <input pInputText formControlName="reference" placeholder="Référence">
+        <p-select [options]="acteTypes" formControlName="type" placeholder="Type d'acte"></p-select>
+        <p-datepicker formControlName="dateActe" />
+        <button pButton label="Créer l'acte" (click)="submit()"></button>
+    </form>
+</p-card>

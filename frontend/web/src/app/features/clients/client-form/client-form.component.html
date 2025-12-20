@@ -1,0 +1,21 @@
+<p-card>
+    <h2>Client</h2>
+
+    <form [formGroup]="form">
+        <p-select formControlName="type" [options]="clientTypes" placeholder="Type de client">
+        </p-select>
+
+        <div *ngIf="form.value.type === 'PHYSIQUE'">
+            <input pInputText formControlName="firstName" placeholder="Prénom">
+            <input pInputText formControlName="lastName" placeholder="Nom">
+            <input pInputText formControlName="cin" placeholder="CIN">
+        </div>
+
+        <div *ngIf="form.value.type === 'MORALE'">
+            <input pInputText formControlName="raisonSociale" placeholder="Raison sociale">
+            <input pInputText formControlName="ice" placeholder="ICE">
+        </div>
+
+        <button pButton label="Enregistrer" (click)="submit()"></button>
+    </form>
+</p-card>

@@ -1,0 +1,18 @@
+<div class="acte-detail" *ngIf="acte">
+    <h1>Acte : {{ acte.reference }}</h1>
+
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Parties</p-tab>
+            <p-tab value="1">Biens</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <app-acte-parties [acte]="acte"></app-acte-parties>
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <app-acte-biens [acte]="acte"></app-acte-biens>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>

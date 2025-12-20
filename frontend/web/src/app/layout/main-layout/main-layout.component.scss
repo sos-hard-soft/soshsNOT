@@ -1,0 +1,11 @@
+.layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.layout-content {
+    padding: 1.5rem;
+    background-color: #f5f6f8;
+    flex: 1;
+}

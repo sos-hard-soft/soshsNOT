@@ -1,0 +1,6 @@
+<ul>
+    <li *ngFor="let p of acte.parties">
+        {{ p.role }} :
+        {{ p.client.firstName || p.client.raisonSociale }}
+    </li>
+</ul>

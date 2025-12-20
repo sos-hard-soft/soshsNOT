@@ -1,0 +1,37 @@
+<p-card>
+    <div class="header">
+        <h2>Clients</h2>
+        <button pButton label="Nouveau client" icon="pi pi-plus" (click)="onNew()"></button>
+    </div>
+
+    <app-client-search (search)="clients = $event"></app-client-search>
+
+    <p-table [value]="clients">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Type</th>
+                <th>Identité</th>
+                <th>CIN / ICE</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-client>
+            <tr>
+                <td>{{ client.type }}</td>
+                <td>
+                    <ng-container *ngIf="client.type === ClientType.PHYSIQUE">
+                        {{ client.firstName }} {{ client.lastName }}
+                    </ng-container>
+                    <ng-container *ngIf="client.type === ClientType.MORALE">
+                        {{ client.raisonSociale }}
+                    </ng-container>
+                </td>
+                <td>{{ client.cin || client.ice }}</td>
+                <td>
+                    <button pButton icon="pi pi-pencil" text (click)="onEdit(client)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
