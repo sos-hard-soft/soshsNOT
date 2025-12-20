@@ -1,31 +1,59 @@
 package com.sosnot.registry.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-public class Client extends PanacheEntityBase {
+@Table(name = "client")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(
+        name = "client_type",
+        discriminatorType = DiscriminatorType.STRING
+)
+public abstract class Client extends PanacheEntityBase {
+
     @Id
     @GeneratedValue
-    public Long id;
+    @Column(columnDefinition = "uuid")
+    public UUID id;
 
-    @Column(nullable = false)
-    public String firstName;
+    /* ===============================
+       Gouvernance des données – Loi 09-08
+       =============================== */
 
-    @Column(nullable = false)
-    public String lastName;
+    @Column(name = "legal_basis", nullable = false, updatable = false)
+    public String legalBasis;
 
-    @Column(nullable = false, unique = true)
-    public String cin;
+    @Column(name = "retention_policy", nullable = false)
+    public String retentionPolicy;
 
-    public String email;
-    public String phone;
+    /* ===============================
+       Audit & cycle de vie
+       =============================== */
 
-    public static Client findByCin(String cin) {
-        return find("cin", cin).firstResult();
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    public LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    public LocalDateTime updatedAt;
+
+    @Column(name = "is_active", nullable = false)
+    public boolean isActive = true;
+
+    /* ===============================
+       Règles métier transverses
+       =============================== */
+
+    public void deactivate() {
+        this.isActive = false;
     }
 
+    public abstract String getIdentifiantLegal();
 }

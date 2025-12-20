@@ -1,69 +1,82 @@
 package com.sosnot.registry.resource;
 
-import com.sosnot.registry.model.Client;
+import com.sosnot.registry.model.ClientMorale;
+import com.sosnot.registry.model.ClientPhysique;
+import com.sosnot.registry.service.ClientService;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import java.util.List;
+import jakarta.ws.rs.core.*;
 
-@Path("/clients")
-@Produces(MediaType.APPLICATION_JSON)
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+
+@Path("/api/clients")
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class ClientResource {
 
-    @GET
-    public List<Client> list() {
-        return Client.listAll();
-    }
+    @Inject
+    ClientService service;
 
-    @GET
-    @Path("/{id}")
-    public Client get(@PathParam("id") Long id) {
-        return Client.findById(id);
-    }
+    /* ===== PHYSIQUE ===== */
 
     @POST
-    @Transactional
-    public Response create(Client client) {
-        if (client.id != null) {
-            throw new WebApplicationException("Id was invalidly set on request.", 422);
-        }
-        client.persist();
-        return Response.ok(client).status(201).build();
+    @Path("/physiques")
+    public Response createPhysique(ClientPhysique client) {
+        UUID id = service.createPhysique(client);
+        return Response.created(URI.create("/api/clients/physiques/" + id)).build();
     }
+
+    @GET
+    @Path("/physiques/{id}")
+    public ClientPhysique getPhysique(@PathParam("id") UUID id) {
+        return service.getPhysiqueById(id);
+    }
+
+    @GET
+    @Path("/physiques")
+    public ClientPhysique findByCin(@QueryParam("cin") String cin) {
+        return service.findPhysiqueByCin(cin);
+    }
+
+    /* ===== MORALE ===== */
+
+    @POST
+    @Path("/morales")
+    public Response createMorale(ClientMorale client) {
+        UUID id = service.createMorale(client);
+        return Response.created(URI.create("/api/clients/morales/" + id)).build();
+    }
+
+    @GET
+    @Path("/morales/{id}")
+    public ClientMorale getMorale(@PathParam("id") UUID id) {
+        return service.getMoraleById(id);
+    }
+
+    @GET
+    @Path("/morales")
+    public List<ClientMorale> searchMorale(
+            @QueryParam("ice") String ice,
+            @QueryParam("raisonSociale") String rs) {
+
+        if (ice != null) {
+            return List.of(service.findMoraleByIce(ice));
+        }
+        if (rs != null) {
+            return service.searchMoraleByRaisonSociale(rs);
+        }
+        throw new BadRequestException("Critère requis");
+    }
+
+    /* ===== COMMUN ===== */
 
     @PUT
-    @Path("/{id}")
-    @Transactional
-    public Client update(@PathParam("id") Long id, Client client) {
-        if (client.firstName == null || client.lastName == null) {
-            throw new WebApplicationException("Client Name was not set on request.", 422);
-        }
-
-        Client entity = Client.findById(id);
-        if (entity == null) {
-            throw new WebApplicationException("Client with id of " + id + " does not exist.", 404);
-        }
-
-        entity.firstName = client.firstName;
-        entity.lastName = client.lastName;
-        entity.cin = client.cin;
-        entity.email = client.email;
-        entity.phone = client.phone;
-        
-        return entity;
-    }
-
-    @DELETE
-    @Path("/{id}")
-    @Transactional
-    public Response delete(@PathParam("id") Long id) {
-        Client entity = Client.findById(id);
-        if (entity == null) {
-            throw new WebApplicationException("Client with id of " + id + " does not exist.", 404);
-        }
-        entity.delete();
-        return Response.status(204).build();
+    @Path("/{id}/deactivate")
+    public Response deactivate(@PathParam("id") UUID id) {
+        service.deactivate(id);
+        return Response.noContent().build();
     }
 }

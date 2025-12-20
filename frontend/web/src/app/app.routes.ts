@@ -1,8 +1,31 @@
 import { Routes } from '@angular/router';
-
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
-    { path: '', redirectTo: 'clients', pathMatch: 'full' },
-    { path: 'clients', loadComponent: () => import('./features/client/client-list/client-list.component').then(m => m.ClientListComponent) },
-    { path: 'clients/new', loadComponent: () => import('./features/client/client-form/client-form.component').then(m => m.ClientFormComponent) },
-    { path: 'clients/:id/edit', loadComponent: () => import('./features/client/client-form/client-form.component').then(m => m.ClientFormComponent) }
+    {
+        path: '',
+        component: MainLayoutComponent,
+        canActivate: [authGuard],
+        children: [
+            {
+                path: 'dashboard',
+                loadComponent: () =>
+                    import('./features/dashboard/dashboard.component')
+                        .then(m => m.DashboardComponent)
+            },
+            {
+                path: 'clients',
+                loadChildren: () =>
+                    import('./features/clients/clients.routes')
+                        .then(m => m.CLIENTS_ROUTES)
+            },
+            {
+                path: 'actes',
+                loadChildren: () =>
+                    import('./features/actes/actes.routes')
+                        .then(m => m.ACTE_ROUTES)
+            },
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+        ]
+    }
 ];
