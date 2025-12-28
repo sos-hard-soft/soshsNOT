@@ -30,6 +30,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - sosnot-network
 
@@ -37,16 +38,21 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:23.0
     container_name: sosnot-keycloak
-    command: start-dev --http-relative-path /auth
+    command: start-dev
+    ports:
+      - "8080:8080"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/sosnot_db
+      KC_DB_URL: jdbc:postgresql://postgres:5432/sosnot_db?currentSchema=keycloak
       KC_DB_USERNAME: sosnot
       KC_DB_PASSWORD: password
+      KC_DB_SCHEMA: keycloak
       KC_PROXY: edge
-      KC_HOSTNAME_URL: http://keycloak.localhost
+      KC_HOSTNAME_URL: http://localhost:8080
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
     depends_on:
       - postgres
     networks:
@@ -64,6 +70,9 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio_data:/data
     networks:

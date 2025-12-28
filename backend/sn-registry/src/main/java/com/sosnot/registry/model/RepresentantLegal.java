@@ -2,6 +2,7 @@ package com.sosnot.registry.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class RepresentantLegal extends PanacheEntityBase {
     @GeneratedValue
     public UUID id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "client_morale_id")
     public ClientMorale clientMorale;

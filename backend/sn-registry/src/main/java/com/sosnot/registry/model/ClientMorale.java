@@ -5,11 +5,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(
-        name = "client_morale",
-        uniqueConstraints = @UniqueConstraint(columnNames = "ice")
-)
-@DiscriminatorValue("MORALE")
+@Table(name = "client_morale", uniqueConstraints = @UniqueConstraint(columnNames = "ice"))
+@DiscriminatorValue("client_morale")
 public class ClientMorale extends Client {
 
     @Column(nullable = false, length = 30)
@@ -26,9 +23,11 @@ public class ClientMorale extends Client {
     public String telephone;
     public String email;
 
-    /* ===============================
-       Lotisseur
-       =============================== */
+    /*
+     * ===============================
+     * Lotisseur
+     * ===============================
+     */
 
     @Column(name = "is_lotisseur", nullable = false)
     public boolean isLotisseur = false;
@@ -36,16 +35,20 @@ public class ClientMorale extends Client {
     @Column(name = "numero_agrement_lotisseur")
     public String numeroAgrementLotisseur;
 
-    /* ===============================
-       Relations
-       =============================== */
+    /*
+     * ===============================
+     * Relations
+     * ===============================
+     */
 
     @OneToMany(mappedBy = "clientMorale", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<RepresentantLegal> representants;
 
-    /* ===============================
-       Méthodes Panache métier
-       =============================== */
+    /*
+     * ===============================
+     * Méthodes Panache métier
+     * ===============================
+     */
 
     public static ClientMorale findByIce(String ice) {
         return find("ice", ice).firstResult();
@@ -53,12 +56,10 @@ public class ClientMorale extends Client {
 
     /* ===== Panache Queries ===== */
 
-
     public static java.util.List<ClientMorale> searchByRaisonSociale(String rs) {
-        return list("LOWER(raisonSociale) like ?1 and active = true",
+        return list("LOWER(raisonSociale) like ?1 and isActive = true",
                 "%" + rs.toLowerCase() + "%");
     }
-
 
     public static List<ClientMorale> findLotisseurs() {
         return list("isLotisseur", true);

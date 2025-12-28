@@ -2,6 +2,7 @@ package com.sosnot.registry.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class ActePartie extends PanacheEntityBase {
     @GeneratedValue
     public UUID id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     public Acte acte;
 

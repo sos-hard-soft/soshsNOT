@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(
-        name = "acte",
-        uniqueConstraints = @UniqueConstraint(columnNames = "numeroActe")
-)
+@Table(name = "acte", uniqueConstraints = @UniqueConstraint(columnNames = "numeroActe"))
 public class Acte extends PanacheEntityBase {
 
     @Id
@@ -32,7 +29,7 @@ public class Acte extends PanacheEntityBase {
     @Column(nullable = false)
     public LocalDateTime dateReception;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     public EtudeNotariale etude;
 
     @OneToMany(mappedBy = "acte", cascade = CascadeType.ALL, orphanRemoval = true)

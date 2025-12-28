@@ -1,0 +1,81 @@
+<div class="page-container">
+    <p-toast></p-toast>
+    <p-confirm-dialog></p-confirm-dialog>
+
+    <div class="page-header">
+        <h2>Gestion des Clients</h2>
+        <div class="header-actions">
+            <p-button label="Nouveau Physique" icon="pi pi-user-plus" (click)="createPhysique()"
+                severity="info"></p-button>
+            <p-button label="Nouveau Moral" icon="pi pi-plus-circle" (click)="createMorale()"
+                severity="help"></p-button>
+        </div>
+    </div>
+
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Personnes Physiques</p-tab>
+            <p-tab value="1">Personnes Morales</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <p-table [value]="physiques()" [paginator]="true" [rows]="10" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>CIN</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Téléphone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-client>
+                        <tr>
+                            <td>{{client.cin}}</td>
+                            <td>{{client.nom}}</td>
+                            <td>{{client.prenom}}</td>
+                            <td>{{client.telephone}}</td>
+                            <td>
+                                <p-button icon="pi pi-pencil" [text]="true" [rounded]="true"
+                                    (click)="editPhysique(client.id!)"></p-button>
+                                <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger"
+                                    (click)="deleteClient($event, client.id!)"></p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+
+            <p-tabpanel value="1">
+                <p-table [value]="morales()" [paginator]="true" [rows]="10" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ICE</th>
+                            <th>Raison Sociale</th>
+                            <th>RC</th>
+                            <th>Téléphone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-client>
+                        <tr>
+                            <td>{{client.ice}}</td>
+                            <td>{{client.raisonSociale}}</td>
+                            <td>{{client.rc}}</td>
+                            <td>{{client.telephone}}</td>
+                            <td>
+                                <p-button icon="pi pi-pencil" [text]="true" [rounded]="true"
+                                    (click)="editMorale(client.id!)"></p-button>
+                                <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger"
+                                    (click)="deleteClient($event, client.id!)"></p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>

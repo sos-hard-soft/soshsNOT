@@ -1,0 +1,50 @@
+{
+    "COMMON": {
+        "SAVE": "Enregistrer",
+        "CANCEL": "Annuler",
+        "DELETE": "Supprimer",
+        "EDIT": "Modifier",
+        "ADD": "Ajouter",
+        "SEARCH": "Rechercher",
+        "ACTIONS": "Actions",
+        "CONFIRM": "Confirmer",
+        "YES": "Oui",
+        "NO": "Non",
+        "BACK": "Retour"
+    },
+    "MENU": {
+        "DASHBOARD": "Tableau de bord",
+        "CLIENTS": "Clients",
+        "ACTES": "Actes",
+        "BIENS": "Biens",
+        "SETTINGS": "Paramètres",
+        "LOGOUT": "Déconnexion"
+    },
+    "CLIENTS": {
+        "TITLE": "Gestion des Clients",
+        "PHYSIQUE": "Clients Physiques",
+        "MORALE": "Clients Moraux",
+        "NEW_PHYSIQUE": "Nouveau Client Physique",
+        "NEW_MORALE": "Nouveau Client Moral",
+        "NAME": "Nom",
+        "PRENOM": "Prénom",
+        "CIN": "CIN",
+        "ADDRESS": "Adresse",
+        "PHONE": "Téléphone",
+        "EMAIL": "Email"
+    },
+    "USERMENU": {
+        "USER": "Utilisateur",
+        "LOGOUT": "Déconnexion",
+        "PROFILE": "Profil",
+        "CHANGE_PASSWORD": "Changer le mot de passe",
+        "SETTINGS": "Paramètres",
+        "NOTIFICATIONS": "Notifications",
+        "HELP": "Aide",
+        "ABOUT": "À propos"
+    },
+    "LANG": {
+        "FR": "Français",
+        "AR": "العربية"
+    }
+}

@@ -1,0 +1,35 @@
+<div class="page-container">
+    <div class="page-header">
+        <h2>Acte Management</h2>
+        <p-button label="Nouveau Acte" icon="pi pi-plus" (click)="goToCreate()"></p-button>
+    </div>
+
+    <p-table [value]="actes()" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Numéro</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-acte>
+            <tr>
+                <td>{{acte.numeroActe}}</td>
+                <td>{{acte.type}}</td>
+                <td>{{acte.dateActe | date}}</td>
+                <td>
+                    <p-tag [value]="acte.cloture ? 'Clôturé' : 'En cours'"
+                        [severity]="getSeverity(acte.cloture)"></p-tag>
+                </td>
+                <td>
+                    <p-button icon="pi pi-search" [text]="true" [rounded]="true"
+                        (onClick)="viewActe(acte.id)"></p-button>
+                    <p-button icon="pi pi-lock" [text]="true" [rounded]="true" severity="secondary"
+                        *ngIf="!acte.cloture"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

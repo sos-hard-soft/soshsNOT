@@ -1,0 +1,59 @@
+<div class="layout-wrapper">
+    <!-- Sidebar -->
+    <aside class="layout-sidebar" [class.collapsed]="!sidebarVisible">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="pi pi-shield"></i>
+                <span>SOSNot</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+                <i class="pi pi-home"></i>
+                <span>{{ 'MENU.DASHBOARD' | translate }}</span>
+            </a>
+            <a routerLink="/actes" routerLinkActive="active" class="nav-item">
+                <i class="pi pi-file-edit"></i>
+                <span>{{ 'MENU.ACTES' | translate }}</span>
+            </a>
+            <a routerLink="/clients" routerLinkActive="active" class="nav-item">
+                <i class="pi pi-users"></i>
+                <span>{{ 'MENU.CLIENTS' | translate }}</span>
+            </a>
+            <a routerLink="/biens" routerLinkActive="active" class="nav-item">
+                <i class="pi pi-building"></i>
+                <span>{{ 'MENU.BIENS' | translate }}</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="layout-content-wrapper">
+        <!-- Topbar -->
+        <header class="layout-topbar">
+            <div class="topbar-left">
+                <p-button icon="pi pi-bars" (click)="sidebarVisible = !sidebarVisible" [rounded]="true" [text]="true"
+                    severity="secondary"></p-button>
+                <span class="breadcrumb">Registry / Overview</span>
+            </div>
+
+            <div class="topbar-right">
+                <p-button [label]="languageService.currentLang() === 'fr' ? 'العربية' : 'Français'"
+                    icon="pi pi-language" (click)="languageService.toggleLanguage()" [text]="true"
+                    severity="secondary"></p-button>
+                <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="secondary"></p-button>
+                <div class="user-profile" (click)="userMenu.toggle($event)">
+                    <p-avatar label="U" shape="circle" styleClass="user-avatar"></p-avatar>
+                    <span class="user-name">{{ 'USERMENU.USER' | translate }}</span>
+                    <i class="pi pi-chevron-down"></i>
+                </div>
+                <p-menu #userMenu [model]="userMenuItems" [popup]="true"></p-menu>
+            </div>
+        </header>
+
+        <main class="layout-content">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

@@ -12,9 +12,11 @@ import java.util.UUID;
 @ApplicationScoped
 public class ClientMoraleService {
 
-    /* =========================================================
-       CRÉATION
-       ========================================================= */
+    /*
+     * =========================================================
+     * CRÉATION
+     * =========================================================
+     */
 
     @Transactional
     public UUID create(ClientMorale client) {
@@ -24,6 +26,14 @@ public class ClientMoraleService {
         // Gouvernance des données (Loi 09-08)
         client.legalBasis = "Obligation légale - Acte notarié";
         client.retentionPolicy = "CLIENT_MORALE";
+
+        if (client.adresses != null) {
+            client.adresses.forEach(adresse -> adresse.client = client);
+        }
+
+        if (client.representants != null) {
+            client.representants.forEach(rep -> rep.clientMorale = client);
+        }
 
         client.persist();
         return client.id;
@@ -39,7 +49,7 @@ public class ClientMoraleService {
             throw new BusinessException("ICE obligatoire");
         }
 
-        if (ClientMorale.findByIce(client.ice) != null) {
+        if (checkIceExists(client.ice)) {
             throw new BusinessException("Un client morale avec cet ICE existe déjà");
         }
 
@@ -57,14 +67,15 @@ public class ClientMoraleService {
         if (client.numeroAgrementLotisseur == null ||
                 client.numeroAgrementLotisseur.isBlank()) {
             throw new BusinessException(
-                    "Un lotisseur doit obligatoirement disposer d’un numéro d’agrément"
-            );
+                    "Un lotisseur doit obligatoirement disposer d’un numéro d’agrément");
         }
     }
 
-    /* =========================================================
-       CONSULTATION
-       ========================================================= */
+    /*
+     * =========================================================
+     * CONSULTATION & AUTOCOMPLETE
+     * =========================================================
+     */
 
     public ClientMorale getById(UUID id) {
 
@@ -100,9 +111,39 @@ public class ClientMoraleService {
         return ClientMorale.list("isLotisseur = true and isActive = true");
     }
 
-    /* =========================================================
-       MISE À JOUR (CONTRÔLÉE)
-       ========================================================= */
+    public List<ClientMorale> autocomplete(String query) {
+        if (query == null || query.length() < 2) {
+            return List.of();
+        }
+        String pattern = "%" + query.toLowerCase() + "%";
+        return ClientMorale.find(
+                "isActive = true and (LOWER(ice) like ?1 or LOWER(raisonSociale) like ?1 or LOWER(rc) like ?1 or LOWER(identifiantFiscal) like ?1)",
+                pattern).list();
+    }
+
+    /*
+     * =========================================================
+     * VÉRIFICATION DE DOUBLE SAISIE
+     * =========================================================
+     */
+
+    public boolean checkIceExists(String ice) {
+        return ClientMorale.count("ice = ?1", ice) > 0;
+    }
+
+    public boolean checkRcExists(String rc) {
+        return ClientMorale.count("rc = ?1", rc) > 0;
+    }
+
+    public boolean checkIfExists(String identifiantFiscal) {
+        return ClientMorale.count("identifiantFiscal = ?1", identifiantFiscal) > 0;
+    }
+
+    /*
+     * =========================================================
+     * MISE À JOUR (CONTRÔLÉE)
+     * =========================================================
+     */
 
     @Transactional
     public void update(UUID id, ClientMorale updates) {
@@ -136,34 +177,18 @@ public class ClientMoraleService {
         if (!updates.isLotisseur && existing.isLotisseur) {
             // Interdit sans analyse des actes
             throw new BusinessException(
-                    "La révocation du statut lotisseur nécessite une vérification des actes liés"
-            );
+                    "La révocation du statut lotisseur nécessite une vérification des actes liés");
         }
     }
 
-    /* =========================================================
-       DÉSACTIVATION (SOFT DELETE)
-       ========================================================= */
+    /*
+     * =========================================================
+     * DÉSACTIVATION (SOFT DELETE)
+     * =========================================================
+     */
 
     @Transactional
     public void deactivate(UUID id) {
-
-        ClientMorale client = getById(id);
-
-        // TODO (prochaine étape)
-        // if (Acte.existsForClient(client.id)) {
-        //     throw new BusinessException("Client lié à des actes notariés");
-        // }
-
-        client.deactivate();
-    }
-
-    /* =========================================================
-       CONTRÔLES D’INTÉGRITÉ (FUTUR)
-       ========================================================= */
-
-    public boolean canBeDeleted(UUID id) {
-        // Toujours false en notariat
-        return false;
+        getById(id).deactivate();
     }
 }

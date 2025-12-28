@@ -1,0 +1,62 @@
+<div class="file-explorer-container">
+    <p-toast></p-toast>
+
+    <div class="flex justify-between items-center mb-4">
+        <h3>Documents du client</h3>
+        <p-fileUpload mode="basic" chooseLabel="Ajouter un document" name="file" [auto]="true" [customUpload]="true"
+            (uploadHandler)="onUpload($event)" class="upload-btn">
+        </p-fileUpload>
+    </div>
+
+    <p-table [value]="documents()" [loading]="loading()" responsiveLayout="scroll" [rows]="5" [paginator]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nom</th>
+                <th>Taille</th>
+                <th>Dernière modification</th>
+                <th style="width: 10rem">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-doc>
+            <tr>
+                <td>
+                    <i [class]="isPdf(doc) ? 'pi pi-file-pdf text-red-500' : isImage(doc) ? 'pi pi-image text-blue-500' : 'pi pi-file'"
+                        class="mr-2"></i>
+                    {{doc.fileName}}
+                </td>
+                <td>{{formatSize(doc.size)}}</td>
+                <td>{{doc.lastModified | date:'medium'}}</td>
+                <td class="flex gap-2">
+                    <p-button icon="pi pi-eye" [rounded]="true" [text]="true" (click)="previewFile(doc)"
+                        pTooltip="Aperçu" *ngIf="isImage(doc) || isPdf(doc)">
+                    </p-button>
+                    <p-button icon="pi pi-download" [rounded]="true" [text]="true" severity="secondary" [as]="'a'"
+                        [href]="doc.url" target="_blank" pTooltip="Télécharger">
+                    </p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                        (click)="deleteFile(doc)" pTooltip="Supprimer">
+                    </p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="text-center p-4 text-500">
+                    Aucun document trouvé pour ce client.
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-dialog [header]="selectedDoc()?.fileName" [(visible)]="previewVisible" [modal]="true"
+        [style]="{width: '80vw', height: '90vh'}" [maximizable]="true" [baseZIndex]="10000" [dismissableMask]="true">
+
+        <div *ngIf="selectedDoc()" class="flex justify-center items-center h-full">
+            <img *ngIf="isImage(selectedDoc()!)" [src]="selectedDoc()!.url"
+                class="max-w-full max-h-full object-contain shadow-lg rounded" alt="Aperçu image">
+
+            <iframe *ngIf="isPdf(selectedDoc()!)" [src]="selectedDoc()!.url | safe:'resourceUrl'"
+                class="w-full h-full border-none shadow-lg rounded"></iframe>
+        </div>
+    </p-dialog>
+</div>

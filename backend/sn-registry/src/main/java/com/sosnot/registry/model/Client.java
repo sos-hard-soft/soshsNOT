@@ -6,54 +6,63 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "client")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(
-        name = "client_type",
-        discriminatorType = DiscriminatorType.STRING
-)
+@DiscriminatorColumn(name = "client_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Client extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue
-    @Column(columnDefinition = "uuid")
-    public UUID id;
+   @Id
+   @GeneratedValue
+   @Column(columnDefinition = "uuid")
+   public UUID id;
 
-    /* ===============================
-       Gouvernance des données – Loi 09-08
-       =============================== */
+   /*
+    * ===============================
+    * Gouvernance des données – Loi 09-08
+    * ===============================
+    */
 
-    @Column(name = "legal_basis", nullable = false, updatable = false)
-    public String legalBasis;
+   @Column(name = "legal_basis", nullable = false, updatable = false)
+   public String legalBasis = "LEGAL_OBLIGATION";
 
-    @Column(name = "retention_policy", nullable = false)
-    public String retentionPolicy;
+   @Column(name = "retention_policy", nullable = false)
+   public String retentionPolicy = "ARCHIVAGE_30_ANS";
 
-    /* ===============================
-       Audit & cycle de vie
-       =============================== */
+   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+   public List<Adresse> adresses;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    public LocalDateTime createdAt;
+   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+   public List<Document> documents;
+   /*
+    * ===============================
+    * Audit & cycle de vie
+    * ===============================
+    */
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    public LocalDateTime updatedAt;
+   @CreationTimestamp
+   @Column(name = "created_at", nullable = false, updatable = false)
+   public LocalDateTime createdAt;
 
-    @Column(name = "is_active", nullable = false)
-    public boolean isActive = true;
+   @UpdateTimestamp
+   @Column(name = "updated_at")
+   public LocalDateTime updatedAt;
 
-    /* ===============================
-       Règles métier transverses
-       =============================== */
+   @Column(name = "is_active", nullable = false)
+   public boolean isActive = true;
 
-    public void deactivate() {
-        this.isActive = false;
-    }
+   /*
+    * ===============================
+    * Règles métier transverses
+    * ===============================
+    */
 
-    public abstract String getIdentifiantLegal();
+   public void deactivate() {
+      this.isActive = false;
+   }
+
+   public abstract String getIdentifiantLegal();
 }

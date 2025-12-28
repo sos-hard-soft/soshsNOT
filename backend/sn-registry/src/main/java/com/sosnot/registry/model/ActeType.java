@@ -6,5 +6,6 @@ public enum ActeType {
     HYPOTHEQUE,
     MAINLEVEE,
     PARTAGE,
-    CONSTITUTION_SOCIETE
+    CONSTITUTION_SOCIETE,
+    SAISIE
 }
