@@ -15,3 +15,12 @@ stop-infra:
 clean:
 	@echo "Cleaning up..."
 	docker-compose down -v
+
+dev-registry:
+	@echo "Starting Registry Service..."
+	cd backend/sn-registry && mvn quarkus:dev -Dnet.bytebuddy.experimental=true
+
+dev-gateway:
+	@echo "Starting Gateway Service..."
+	cd backend/sn-gateway && mvn quarkus:dev
+

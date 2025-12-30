@@ -97,6 +97,7 @@ public class ClientPhysiqueService {
         existing.dateNaissance = data.dateNaissance;
         existing.lieuNaissance = data.lieuNaissance;
         existing.nationalite = data.nationalite;
+        existing.gender = data.gender;
 
         LOG.info("Physical client {} updated successfully", id);
     }

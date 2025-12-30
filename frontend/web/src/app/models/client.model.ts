@@ -20,6 +20,11 @@ export interface Client {
     adresses?: Adresse[];
 }
 
+export enum Gender {
+    MASCULIN = 'MASCULIN',
+    FEMININ = 'FEMININ'
+}
+
 export interface ClientPhysique extends Client {
     cin: string;
     nom: string;
@@ -29,6 +34,7 @@ export interface ClientPhysique extends Client {
     dateNaissance?: string;
     lieuNaissance?: string;
     nationalite?: string;
+    gender?: Gender;
 }
 
 export interface ClientMorale extends Client {

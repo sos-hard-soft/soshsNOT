@@ -38,6 +38,12 @@
                             </div>
 
                             <div class="col-12 md:col-6 field">
+                                <label class="font-medium">Genre</label>
+                                <p-select [options]="genders" [(ngModel)]="client.gender" optionLabel="label"
+                                    optionValue="value" placeholder="Sélectionner"></p-select>
+                            </div>
+
+                            <div class="col-12 md:col-6 field">
                                 <label class="font-medium">Prénom (Français)</label>
                                 <input pInputText [(ngModel)]="client.prenom" />
                             </div>

@@ -26,3 +26,7 @@ echo "Setting password for 'test'..."
 docker exec sosnot-keycloak /opt/keycloak/bin/kcadm.sh set-password -r soshs --username test --new-password test
 
 echo "Keycloak setup complete. User: test / test"
+
+# Create Client 'sn-gateway' (Service)
+echo "Creating Client 'sn-gateway'..."
+docker exec sosnot-keycloak /opt/keycloak/bin/kcadm.sh create clients -r soshs -s clientId=sn-gateway -s enabled=true -s clientAuthenticatorType=client-secret -s secret=secret -s serviceAccountsEnabled=true

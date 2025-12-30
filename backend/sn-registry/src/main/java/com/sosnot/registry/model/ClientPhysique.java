@@ -12,6 +12,9 @@ public class ClientPhysique extends Client {
     @Column(nullable = false, length = 20)
     public String cin;
 
+    @Enumerated(EnumType.STRING)
+    public Gender gender;
+
     @Column(nullable = false, length = 100)
     public String nom;
 
@@ -20,7 +23,6 @@ public class ClientPhysique extends Client {
 
     public String nomAr;
     public String prenomAr;
-
 
     public LocalDate dateNaissance;
     public String lieuNaissance;

@@ -11,10 +11,11 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { TabsModule } from 'primeng/tabs';
 import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
 import { FileExplorerComponent } from '../../../components/file-explorer/file-explorer';
 import { MessageService } from 'primeng/api';
 import { ClientService } from '../../../services/client.service';
-import { ClientPhysique, Adresse } from '../../../models/client.model';
+import { ClientPhysique, Adresse, Gender } from '../../../models/client.model';
 
 @Component({
     selector: 'app-physique-detail',
@@ -31,6 +32,7 @@ import { ClientPhysique, Adresse } from '../../../models/client.model';
         DialogModule,
         TextareaModule,
         TabsModule,
+        SelectModule,
         FileExplorerComponent
     ],
     providers: [MessageService],
@@ -49,6 +51,11 @@ export class PhysiqueDetailComponent implements OnInit {
     } as any;
 
     dateNaissance: Date | undefined;
+
+    genders = [
+        { label: 'Masculin', value: Gender.MASCULIN },
+        { label: 'Féminin', value: Gender.FEMININ }
+    ];
 
     // Address Dialog
     showAdresseDialog = false;
@@ -78,20 +85,13 @@ export class PhysiqueDetailComponent implements OnInit {
     }
 
     loadClient(id: string) {
-        // Since we don't have a getById endpoint for Physique specifically in the Service (except generic get all),
-        // we might ideally need one. But usually getAllPhysiques filters. 
-        // For now, let's assume we fetch all and find, OR better, add getById to service.
-        // Let's assume we add getById to service or use the generic one if it returns specific fields.
-        // Actually ClientService.getAll() returns Client[], we might need a specific endpoint.
-        // Ideally: GET /api/clients/physiques/{id}
-        // I will add this to the service in parallel.
         this.clientService.getPhysiqueById(id).subscribe({
             next: (data) => {
                 this.client = data;
                 if (data.dateNaissance) {
                     this.dateNaissance = new Date(data.dateNaissance);
                 }
-                this.cdr.detectChanges(); // Force update
+                this.cdr.detectChanges();
             },
             error: () => {
                 this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Client introuvable' });

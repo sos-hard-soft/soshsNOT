@@ -30,9 +30,11 @@
                     <p-button icon="pi pi-eye" [rounded]="true" [text]="true" (click)="previewFile(doc)"
                         pTooltip="Aperçu" *ngIf="isImage(doc) || isPdf(doc)">
                     </p-button>
-                    <p-button icon="pi pi-download" [rounded]="true" [text]="true" severity="secondary" [as]="'a'"
-                        [href]="doc.url" target="_blank" pTooltip="Télécharger">
-                    </p-button>
+                    <a [href]="doc.url" target="_blank" class="no-underline">
+                        <p-button icon="pi pi-download" [rounded]="true" [text]="true" severity="secondary" 
+                            pTooltip="Télécharger">
+                        </p-button>
+                    </a>
                     <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
                         (click)="deleteFile(doc)" pTooltip="Supprimer">
                     </p-button>
